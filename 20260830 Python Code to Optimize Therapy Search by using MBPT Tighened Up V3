@@ -1,0 +1,187 @@
+# MBTI Therapy Matching Algorithm
+# Global HC Analytics LLC - Open Source Code provided to Help People
+# Version: SnapDrag1n V3 — August 30th, 2026
+
+# ---------------------------------------------------------
+# MBTI DESCRIPTORS (Personality + Therapist Match)
+# ---------------------------------------------------------
+
+mbti_descriptors = {
+    "INTJ": {
+        "type": "The Architect",
+        "traits": "Strategic, systems-driven, independent, long-range thinker",
+        "therapy": "CBT, ACT, schema therapy, solution-focused",
+    },
+    "INTP": {
+        "type": "A Logician",
+        "traits": "Analytical, curious, abstract, theory-driven",
+        "therapy": "Existential therapy, CBT, metacognitive therapy",
+    },
+    "ENTJ": {
+        "type": "The Commander",
+        "traits": "Decisive, assertive, efficiency-obsessed, leadership-oriented",
+        "therapy": "CBT, executive coaching, behavioral therapy",
+    },
+    "ENTP": {
+        "type": "A Debater",
+        "traits": "Innovative, contrarian, idea-driven, fast-thinking",
+        "therapy": "Existential therapy, dialectical approaches, metacognitive therapy",
+    },
+    "INFJ": {
+        "type": "An Advocate",
+        "traits": "Deeply intuitive, mission-driven, empathic, pattern-recognizer",
+        "therapy": "Insight-oriented, trauma-informed, existential, psychodynamic",
+    },
+    "INFP": {
+        "type": "A Mediator",
+        "traits": "Idealistic, values-driven, emotionally intuitive",
+        "therapy": "Humanistic, IFS, somatic, narrative therapy",
+    },
+    "ENFJ": {
+        "type": "The Protagonist",
+        "traits": "Charismatic, leadership-focused, socially attuned",
+        "therapy": "Relational therapy, psychodynamic, coaching-integrated",
+    },
+    "ENFP": {
+        "type": "A Campaigner",
+        "traits": "Energetic, imaginative, emotional, expressive",
+        "therapy": "Humanistic, IFS, somatic, narrative",
+    },
+    "ISTJ": {
+        "type": "A Logistician",
+        "traits": "Duty-focused, structured, reliable, detail-oriented",
+        "therapy": "CBT, behavioral therapy, structured modalities",
+    },
+    "ISFJ": {
+        "type": "The Defender",
+        "traits": "Loyal, caring, stability-oriented",
+        "therapy": "Supportive therapy, CBT, interpersonal therapy",
+    },
+    "ESTJ": {
+        "type": "An Executive",
+        "traits": "Order-driven, practical, leadership-oriented",
+        "therapy": "CBT, behavioral therapy, coaching-integrated",
+    },
+    "ESFJ": {
+        "type": "A Consul",
+        "traits": "Social, harmony-focused, organized",
+        "therapy": "Supportive therapy, interpersonal therapy, CBT",
+    },
+    "ISTP": {
+        "type": "Virtuoso",
+        "traits": "Hands-on, practical, independent, action-oriented",
+        "therapy": "Solution-focused therapy, behavioral therapy, skills-based",
+    },
+    "ISFP": {
+        "type": "An Adventurer",
+        "traits": "Sensitive, artistic, experiential",
+        "therapy": "Somatic therapy, expressive arts therapy, humanistic",
+    },
+    "ESTP": {
+        "type": "A Dynamo",
+        "traits": "Bold, spontaneous, action-driven",
+        "therapy": "Solution-focused therapy, behavioral therapy, coaching-style",
+    },
+    "ESFP": {
+        "type": "The Performer",
+        "traits": "Fun-loving, expressive, emotional",
+        "therapy": "Somatic therapy, expressive arts therapy, humanistic",
+    },
+}
+
+# ---------------------------------------------------------
+# COMPATIBILITY MATRIX (Therapist ↔ Patient)
+# ---------------------------------------------------------
+
+compatibility_matrix = {
+    "INFP": {"INFP":3,"ENFP":2,"INFJ":3,"ENFJ":2,"INTP":1,"ENTP":1,"INTJ":2,"ENTJ":0,
+             "ISFP":2,"ESFP":1,"ISFJ":2,"ESFJ":1,"ISTP":1,"ESTP":0,"ISTJ":1,"ESTJ":0},
+
+    "ENFP": {"INFP":2,"ENFP":3,"INFJ":2,"ENFJ":3,"INTP":2,"ENTP":2,"INTJ":1,"ENTJ":1,
+             "ISFP":2,"ESFP":2,"ISFJ":1,"ESFJ":1,"ISTP":1,"ESTP":1,"ISTJ":0,"ESTJ":0},
+
+    "INFJ": {"INFP":3,"ENFP":2,"INFJ":3,"ENFJ":2,"INTP":2,"ENTP":1,"INTJ":2,"ENTJ":1,
+             "ISFP":2,"ESFP":1,"ISFJ":2,"ESFJ":1,"ISTP":1,"ESTP":0,"ISTJ":1,"ESTJ":0},
+
+    "ENFJ": {"INFP":2,"ENFP":3,"INFJ":2,"ENFJ":3,"INTP":1,"ENTP":1,"INTJ":2,"ENTJ":2,
+             "ISFP":2,"ESFP":2,"ISFJ":2,"ESFJ":2,"ISTP":1,"ESTP":1,"ISTJ":1,"ESTJ":1},
+
+    "INTP": {"INFP":1,"ENFP":2,"INFJ":2,"ENFJ":1,"INTP":3,"ENTP":2,"INTJ":2,"ENTJ":1,
+             "ISFP":1,"ESFP":0,"ISFJ":1,"ESFJ":0,"ISTP":2,"ESTP":1,"ISTJ":2,"ESTJ":1},
+
+    "ENTP": {"INFP":1,"ENFP":2,"INFJ":1,"ENFJ":1,"INTP":2,"ENTP":3,"INTJ":2,"ENTJ":1,
+             "ISFP":1,"ESFP":1,"ISFJ":0,"ESFJ":0,"ISTP":2,"ESTP":2,"ISTJ":1,"ESTJ":1},
+
+    "INTJ": {"INFP":2,"ENFP":1,"INFJ":2,"ENFJ":2,"INTP":2,"ENTP":2,"INTJ":3,"ENTJ":2,
+             "ISFP":1,"ESFP":0,"ISFJ":1,"ESFJ":0,"ISTP":2,"ESTP":1,"ISTJ":2,"ESTJ":1},
+
+    "ENTJ": {"INFP":0,"ENFP":1,"INFJ":1,"ENFJ":2,"INTP":1,"ENTP":1,"INTJ":2,"ENTJ":3,
+             "ISFP":0,"ESFP":0,"ISFJ":1,"ESFJ":1,"ISTP":1,"ESTP":2,"ISTJ":2,"ESTJ":3},
+
+    "ISFP": {"INFP":2,"ENFP":2,"INFJ":2,"ENFJ":2,"INTP":1,"ENTP":1,"INTJ":1,"ENTJ":0,
+             "ISFP":3,"ESFP":2,"ISFJ":3,"ESFJ":2,"ISTP":2,"ESTP":1,"ISTJ":2,"ESTJ":1},
+
+    "ESFP": {"INFP":1,"ENFP":2,"INFJ":1,"ENFJ":2,"INTP":0,"ENTP":1,"INTJ":0,"ENTJ":0,
+             "ISFP":2,"ESFP":3,"ISFJ":2,"ESFJ":3,"ISTP":1,"ESTP":2,"ISTJ":1,"ESTJ":1},
+
+    "ISFJ": {"INFP":2,"ENFP":1,"INFJ":2,"ENFJ":2,"INTP":1,"ENTP":0,"INTJ":1,"ENTJ":1,
+             "ISFP":3,"ESFP":2,"ISFJ":3,"ESFJ":2,"ISTP":2,"ESTP":1,"ISTJ":3,"ESTJ":2},
+
+    "ESFJ": {"INFP":1,"ENFP":1,"INFJ":1,"ENFJ":2,"INTP":0,"ENTP":0,"INTJ":0,"ENTJ":1,
+             "ISFP":2,"ESFP":3,"ISFJ":2,"ESFJ":3,"ISTP":1,"ESTP":2,"ISTJ":2,"ESTJ":3},
+
+    "ISTP": {"INFP":1,"ENFP":1,"INFJ":1,"ENFJ":1,"INTP":2,"ENTP":2,"INTJ":2,"ENTJ":1,
+             "ISFP":2,"ESFP":1,"ISFJ":2,"ESFJ":1,"ISTP":3,"ESTP":2,"ISTJ":2,"ESTJ":1},
+
+    "ESTP": {"INFP":0,"ENFP":1,"INFJ":0,"ENFJ":1,"INTP":1,"ENTP":2,"INTJ":1,"ENTJ":2,
+             "ISFP":1,"ESFP":2,"ISFJ":1,"ESFJ":2,"ISTP":2,"ESTP":3,"ISTJ":2,"ESTJ":2},
+
+    "ISTJ": {"INFP":1,"ENFP":0,"INFJ":1,"ENFJ":1,"INTP":2,"ENTP":1,"INTJ":2,"ENTJ":2,
+             "ISFP":2,"ESFP":1,"ISFJ":3,"ESFJ":2,"ISTP":2,"ESTP":2,"ISTJ":3,"ESTJ":2},
+
+    "ESTJ": {"INFP":0,"ENFP":0,"INFJ":0,"ENFJ":1,"INTP":1,"ENTP":1,"INTJ":1,"ENTJ":3,
+             "ISFP":1,"ESFP":1,"ISFJ":2,"ESFJ":3,"ISTP":1,"ESTP":2,"ISTJ":2,"ESTJ":3},
+}
+
+# ---------------------------------------------------------
+# RATING SYMBOLS
+# ---------------------------------------------------------
+
+RATING_SYMBOLS = {
+    3: "◎ (Ideal)",
+    2: "○ (Good)",
+    1: "△ (Neutral)",
+    0: "✖ (Poor)",
+}
+
+# ---------------------------------------------------------
+# CORE FUNCTIONS
+# ---------------------------------------------------------
+
+def best_matches(patient_type, top_n=5):
+    """Return top therapist matches for a patient type along with rating symbols."""
+    scores = compatibility_matrix.get(patient_type)
+    if not scores:
+        raise ValueError("Invalid MBTI type")
+
+    sorted_matches = sorted(scores.items(), key=lambda x: x[1], reverse=True)
+    return sorted_matches[:top_n]
+
+def describe_type(mbti):
+    """Return descriptor block for a given MBTI type."""
+    return mbti_descriptors.get(mbti, "Unknown MBTI type")
+
+# ---------------------------------------------------------
+# EXAMPLE USAGE
+# ---------------------------------------------------------
+
+patient = "INTJ"
+
+print(f"Best therapist matches for {patient} ({mbti_descriptors[patient]['type']}):")
+for therapist, score in best_matches(patient):
+    symbol = RATING_SYMBOLS.get(score, "")
+    print(f"{therapist}: {score} | Rating: {symbol}")
+
+print("\nPatient Traits & Preferred Modalities:")
+print(f"Traits: {mbti_descriptors[patient]['traits']}")
+print(f"Therapy Modalities: {mbti_descriptors[patient]['therapy']}")
