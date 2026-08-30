@@ -1,0 +1,125 @@
+# MBTI Therapy Matching Algorithm
+# Global HC Analytics LLC - Open Source Code provided to Help People - August 30th, 2026
+#
+# Our hypothesis: after many years of therapy and talking to people, I realize that, quite often, people will have a negative experience with their first therapist.
+#                 Now, this could be for several reasons.
+#
+#			1) Their personality type just did not match with that particular therapist.  I believe that we can use something as simple as a free Myers-Briggs
+#			   Personality Test on both ends.
+#
+#			2) Given I am quite busy with my other companies and nonprofits, I share this hypothesis and algorithm - using Python Code - openly.
+#			   I hope BetterHelp, Bridgeside, or any company that matches people with therapists does this or something like this.
+#
+#			3) Even if not?  Well, my brother in law Jon Lawlor loved GitHub.  The coders whom I respect love GitHub.  And I love GitHub!
+#			   SO... Hello, world!  Enjoy this free code from.
+# 
+# Jeff Conroy — Global HC Analytics LLC Founder & Managing Principal Concept Code: Python Source Code to find a Better Therapist for You
+
+# Compatibility scoring:
+# ◎ = 3 (Ideal)
+# ○ = 2 (Good)
+# △ = 1 (Neutral)
+# ✖ = 0 (Poor)
+
+compatibility_matrix = {
+    "INFP": {"INFP":3, "ENFP":2, "INFJ":3, "ENFJ":2,
+             "INTP":1, "ENTP":1, "INTJ":2, "ENTJ":0,
+             "ISFP":2, "ESFP":1, "ISFJ":2, "ESFJ":1,
+             "ISTP":1, "ESTP":0, "ISTJ":1, "ESTJ":0},
+
+    "ENFP": {"INFP":2, "ENFP":3, "INFJ":2, "ENFJ":3,
+             "INTP":2, "ENTP":2, "INTJ":1, "ENTJ":1,
+             "ISFP":2, "ESFP":2, "ISFJ":1, "ESFJ":1,
+             "ISTP":1, "ESTP":1, "ISTJ":0, "ESTJ":0},
+
+    "INFJ": {"INFP":3, "ENFP":2, "INFJ":3, "ENFJ":2,
+             "INTP":2, "ENTP":1, "INTJ":2, "ENTJ":1,
+             "ISFP":2, "ESFP":1, "ISFJ":2, "ESFJ":1,
+             "ISTP":1, "ESTP":0, "ISTJ":1, "ESTJ":0},
+
+    "ENFJ": {"INFP":2, "ENFP":3, "INFJ":2, "ENFJ":3,
+             "INTP":1, "ENTP":1, "INTJ":2, "ENTJ":2,
+             "ISFP":2, "ESFP":2, "ISFJ":2, "ESFJ":2,
+             "ISTP":1, "ESTP":1, "ISTJ":1, "ESTJ":1},
+
+    # NT Types
+    "INTP": {"INFP":1, "ENFP":2, "INFJ":2, "ENFJ":1,
+             "INTP":3, "ENTP":2, "INTJ":2, "ENTJ":1,
+             "ISFP":1, "ESFP":0, "ISFJ":1, "ESFJ":0,
+             "ISTP":2, "ESTP":1, "ISTJ":2, "ESTJ":1},
+
+    "ENTP": {"INFP":1, "ENFP":2, "INFJ":1, "ENFJ":1,
+             "INTP":2, "ENTP":3, "INTJ":2, "ENTJ":1,
+             "ISFP":1, "ESFP":1, "ISFJ":0, "ESFJ":0,
+             "ISTP":2, "ESTP":2, "ISTJ":1, "ESTJ":1},
+
+    "INTJ": {"INFP":2, "ENFP":1, "INFJ":2, "ENFJ":2,
+             "INTP":2, "ENTP":2, "INTJ":3, "ENTJ":2,
+             "ISFP":1, "ESFP":0, "ISFJ":1, "ESFJ":0,
+             "ISTP":2, "ESTP":1, "ISTJ":2, "ESTJ":1},
+
+    "ENTJ": {"INFP":0, "ENFP":1, "INFJ":1, "ENFJ":2,
+             "INTP":1, "ENTP":1, "INTJ":2, "ENTJ":3,
+             "ISFP":0, "ESFP":0, "ISFJ":1, "ESFJ":1,
+             "ISTP":1, "ESTP":2, "ISTJ":2, "ESTJ":3},
+
+    # SF Types
+    "ISFP": {"INFP":2, "ENFP":2, "INFJ":2, "ENFJ":2,
+             "INTP":1, "ENTP":1, "INTJ":1, "ENTJ":0,
+             "ISFP":3, "ESFP":2, "ISFJ":3, "ESFJ":2,
+             "ISTP":2, "ESTP":1, "ISTJ":2, "ESTJ":1},
+
+    "ESFP": {"INFP":1, "ENFP":2, "INFJ":1, "ENFJ":2,
+             "INTP":0, "ENTP":1, "INTJ":0, "ENTJ":0,
+             "ISFP":2, "ESFP":3, "ISFJ":2, "ESFJ":3,
+             "ISTP":1, "ESTP":2, "ISTJ":1, "ESTJ":1},
+
+    "ISFJ": {"INFP":2, "ENFP":1, "INFJ":2, "ENFJ":2,
+             "INTP":1, "ENTP":0, "INTJ":1, "ENTJ":1,
+             "ISFP":3, "ESFP":2, "ISFJ":3, "ESFJ":2,
+             "ISTP":2, "ESTP":1, "ISTJ":3, "ESTJ":2},
+
+    "ESFJ": {"INFP":1, "ENFP":1, "INFJ":1, "ENFJ":2,
+             "INTP":0, "ENTP":0, "INTJ":0, "ENTJ":1,
+             "ISFP":2, "ESFP":3, "ISFJ":2, "ESFJ":3,
+             "ISTP":1, "ESTP":2, "ISTJ":2, "ESTJ":3},
+
+    # ST Types
+    "ISTP": {"INFP":1, "ENFP":1, "INFJ":1, "ENFJ":1,
+             "INTP":2, "ENTP":2, "INTJ":2, "ENTJ":1,
+             "ISFP":2, "ESFP":1, "ISFJ":2, "ESFJ":1,
+             "ISTP":3, "ESTP":2, "ISTJ":2, "ESTJ":1},
+
+    "ESTP": {"INFP":0, "ENFP":1, "INFJ":0, "ENFJ":1,
+             "INTP":1, "ENTP":2, "INTJ":1, "ENTJ":2,
+             "ISFP":1, "ESFP":2, "ISFJ":1, "ESFJ":2,
+             "ISTP":2, "ESTP":3, "ISTJ":2, "ESTJ":2},
+
+    "ISTJ": {"INFP":1, "ENFP":0, "INFJ":1, "ENFJ":1,
+             "INTP":2, "ENTP":1, "INTJ":2, "ENTJ":2,
+             "ISFP":2, "ESFP":1, "ISFJ":3, "ESFJ":2,
+             "ISTP":2, "ESTP":2, "ISTJ":3, "ESTJ":2},
+
+    "ESTJ": {"INFP":0, "ENFP":0, "INFJ":0, "ENFJ":1,
+             "INTP":1, "ENTP":1, "INTJ":1, "ENTJ":3,
+             "ISFP":1, "ESFP":1, "ISFJ":2, "ESFJ":3,
+             "ISTP":1, "ESTP":2, "ISTJ":2, "ESTJ":3}
+}
+
+def best_matches(patient_type, top_n=5):
+    """Return the top therapist matches for a given patient MBTI type."""
+    scores = compatibility_matrix.get(patient_type)
+    if not scores:
+        raise ValueError("Invalid MBTI type")
+
+    # Sort therapist types by compatibility score (descending)
+    sorted_matches = sorted(scores.items(), key=lambda x: x[1], reverse=True)
+
+    return sorted_matches[:top_n]
+
+
+# Example usage:
+patient = "INFP"
+print(f"Best therapist matches for {patient}:")
+for therapist, score in best_matches(patient):
+    print(f"{therapist}: {score}")
